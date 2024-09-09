@@ -1,0 +1,43 @@
+All Commands started after using Double tab
+FIrst, need to check whether in my system, nasm is installed or not.
+If not,
+
+Before installing nasm, need to install “Homebrew”
+
+Homebrew is a popular package manager for macOS (and Linux) that simplifies the installation of software. It allows users to install and manage various tools, libraries, and applications directly from the command line. Homebrew handles dependencies automatically and ensures software is up-to-date.
+
+Now, need to check whether in my system, homebrew is installed or not.
+If not,
+
+Here is the command :
+
+		/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+
+it will take 5-10 miniutes to install homebrew.
+
+“””” Now need to add hombrew to PATH Directory “”””
+
+Here is the command :
+
+		eval "$(/opt/homebrew/bin/brew shellenv)"
+
+Homebrew is installed.
+
+Now time for installing nasm.
+Here is the command :
+
+		brew install nasm
+
+Nasm is installed
+
+From lab manual 3
+
+E1 :  ( For Example 1 )
+
+    nasm -f macho64 -o asem-E1.o asem-E1.asm 
+    ld -o asem-E1 asem-E1.o -lSystem -syslibroot $(xcrun --show-sdk-path) -e _start -platform_version macos 10.12 11.0
+
+E4 :  ( For Example 4 )
+
+		nasm -f macho64 asem-E4.asm -o asem-E4.o
+    ld -o asem-E4 asem-E4.o -lSystem -syslibroot $(xcrun --show-sdk-path) -e _main -platform_version macos 10.12 11.0
