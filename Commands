@@ -1,3 +1,6 @@
+
+######               Commands for Setting up Environment to run Assembly Program in NASM                  ##########
+
 All Commands started after using single tab
 FIrst, need to check whether in my system, nasm is installed or not.
 If not,
@@ -20,10 +23,17 @@ Here is the command :
 
 	eval "$(/opt/homebrew/bin/brew shellenv)"
 
+Homebrew is installed & Added to PATH.
 Now time for installing nasm.
 Here is the command :
 
 	brew install nasm
+
+Nasm is installed
+
+
+
+######               Commands for running Assembly Program from Terminal                  ##########
 
 From lab manual 3
 
