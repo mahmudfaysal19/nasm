@@ -1,0 +1,70 @@
+section .data
+    output_msg db "Enter the number:", 0       ; Message asking for input
+    output_msg1 db "POSITIVE", 0Ah, 0          ; Message for positive number
+    output_msg2 db "ZERO", 0Ah, 0              ; Message for zero
+    output_msg3 db "NEGATIVE", 0Ah, 0          ; Message for negative number
+    input_format db "%d", 0                    ; Format string for scanf
+    output_msg_format db "%s", 0               ; Format string for printf
+    number dq 0                                ; Reserve space for 'number'
+    debug_msg db "Debug: %d", 0Ah, 0          ; Debug message format
+    number_fmt db "%d", 0                      ; Format string for printing number
+
+section .text
+    global _main            ; Entry point for macOS (underscore is required)
+    extern _printf          ; Declare external printf function (with underscore for macOS)
+    extern _scanf           ; Declare external scanf function (with underscore for macOS)
+
+_main:
+    ; Print "Enter the number:"
+    lea rdi, [rel output_msg]                ; Load the relative address of 'output_msg' into rdi
+    lea rsi, [rel output_msg_format]         ; Load the relative address of 'output_msg_format' into rsi
+    xor rax, rax                             ; Clear rax (required for variadic functions)
+    call _printf                             ; Call printf
+
+    ; Get the input from user
+    lea rdi, [rel input_format]              ; Load the relative address of 'input_format' into rdi
+    lea rsi, [rel number]                    ; Load the relative address of 'number' into rsi
+    xor rax, rax                             ; Clear rax
+    call _scanf                              ; Call scanf
+
+    ; Print the debug value of 'number'
+    lea rdi, [rel debug_msg]                 ; Load the relative address of 'debug_msg' into rdi
+    mov rsi, [rel number]                    ; Load the value of 'number' into rsi
+    xor rax, rax                             ; Clear rax (required for variadic functions)
+    call _printf                             ; Call printf
+
+    ; Load the input number
+    mov rax, [rel number]                    ; Move the value of 'number' into rax
+    cmp rax, 0                               ; Compare the value in rax to 0
+    jl NEGATIVE                              ; Jump to NEGATIVE if rax is less than 0
+    je ZERO                                  ; Jump to ZERO if rax equals 0
+    jg POSITIVE                              ; Jump to POSITIVE if rax is greater than 0
+
+POSITIVE:
+    ; Print "POSITIVE"
+    lea rdi, [rel output_msg1]               ; Load the relative address of 'output_msg1' into rdi
+    lea rsi, [rel output_msg_format]         ; Load the relative address of 'output_msg_format' into rsi
+    xor rax, rax                             ; Clear rax
+    call _printf                             ; Call printf
+    jmp EXIT_                               ; Jump to exit
+
+ZERO:
+    ; Print "ZERO"
+    lea rdi, [rel output_msg2]               ; Load the relative address of 'output_msg2' into rdi
+    lea rsi, [rel output_msg_format]         ; Load the relative address of 'output_msg_format' into rsi
+    xor rax, rax                             ; Clear rax
+    call _printf                             ; Call printf
+    jmp EXIT_                               ; Jump to exit
+
+NEGATIVE:
+    ; Print "NEGATIVE"
+    lea rdi, [rel output_msg3]               ; Load the relative address of 'output_msg3' into rdi
+    lea rsi, [rel output_msg_format]         ; Load the relative address of 'output_msg_format' into rsi
+    xor rax, rax                             ; Clear rax
+    call _printf                             ; Call printf
+
+EXIT_:
+    ; Exit the program using syscall
+    mov rax, 0x2000001                       ; syscall number for exit on macOS
+    xor rdi, rdi                             ; Return code 0
+    syscall                                  ; Make the syscall to exit the program
